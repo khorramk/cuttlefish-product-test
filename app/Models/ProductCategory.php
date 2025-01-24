@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ProductCategory extends Model
+{
+
+    /**
+     * The table being used for this model
+     * @var string
+     */
+    protected $table = 'product_categories';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'category_link',
+        'description',
+        'image_path',
+    ];
+
+    public function products()
+    {
+        $this->hasMany(Product::class, 'product_categories_id', 'id');
+    }
+}
