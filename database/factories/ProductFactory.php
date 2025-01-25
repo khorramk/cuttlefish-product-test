@@ -24,7 +24,7 @@ class ProductFactory extends Factory
             'sale_price' => $this->faker->randomFloat(2, 0.10, 500),
             'product_image_path' => $this->faker->imageUrl(),
             'product_categories_id' => ProductCategory::factory(),
-            'active' => $this->faker->randomElement([0, 1]),
+            'active' => 1,
             ];
     }
 }
