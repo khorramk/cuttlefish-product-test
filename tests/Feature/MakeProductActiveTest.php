@@ -26,7 +26,9 @@ class MakeProductActiveTest extends TestCase
        $productCategory->products()->create([
         'name' => 'Fluffy Socks',
         'price' => 0.99,
-        'active' => 1
+        'active' => 1,
+        'created_at' => now()->format('Y:m:d'),
+        'updated_at' => now()->format('Y:m:d'),
        ]);
 
         $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name;
@@ -49,11 +51,13 @@ class MakeProductActiveTest extends TestCase
        $productCategory->name = 'Socks';
        $productCategory->category_link = 'https://cuttlefish.com/products/categories/clothes';
        $productCategory->save();
+
        $productCategory->products()->create([
         'name' => 'Fluffy Socks',
         'price' => 0.99,
         'active' => 1,
-        'created_at' => now()->subYears(2),
+        'created_at' => now()->subYears(2)->format('Y:m:d'),
+        'updated_at' => now()->format('Y:m:d'),
        ]);
 
         $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name . ' due to added more than two years ago';

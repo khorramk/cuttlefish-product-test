@@ -14,6 +14,7 @@ class Product extends Model
      */
     protected $table = 'products';
 
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -27,5 +28,7 @@ class Product extends Model
         'product_image_path',
         'active',
         'image_path',
+        'created_at',
+        'updated_at',
     ];
 }
