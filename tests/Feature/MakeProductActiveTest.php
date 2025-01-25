@@ -17,7 +17,7 @@ class MakeProductActiveTest extends TestCase
     public function test_product_is_not_active_if_prodcut_categories_is_socks(): void
     {
 
-       $productCategory = new ProductCategory();
+        $productCategory = ProductCategory::factory()->count(1)->create()->first();
 
        $productCategory->name = 'Socks';
        $productCategory->category_link = 'https://cuttlefish.com/products/categories/clothes';
@@ -30,6 +30,33 @@ class MakeProductActiveTest extends TestCase
        ]);
 
         $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name;
+
+        $this->artisan('make:product:inactive')
+                        ->expectsChoice('Please choose product Categories name', 'Socks', ['Pants', 'Tie', 'Socks', 'Suit', 'Coat', 'T-shirt'])
+                        ->doesntExpectOutput('Successfull')
+                        ->expectsOutput($message);
+
+    }
+
+/**
+     * Testing the command for non active products and added two years ago
+     */
+    public function test_product_is_not_active_if_prodcut_categories_is_socks_and_old(): void
+    {
+
+        $productCategory = ProductCategory::factory()->count(1)->create()->first();
+
+       $productCategory->name = 'Socks';
+       $productCategory->category_link = 'https://cuttlefish.com/products/categories/clothes';
+       $productCategory->save();
+       $productCategory->products()->create([
+        'name' => 'Fluffy Socks',
+        'price' => 0.99,
+        'active' => 1,
+        'created_at' => now()->subYears(2),
+       ]);
+
+        $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name . ' due to added more than two years ago';
 
         $this->artisan('make:product:inactive')
                         ->expectsChoice('Please choose product Categories name', 'Socks', ['Pants', 'Tie', 'Socks', 'Suit', 'Coat', 'T-shirt'])
