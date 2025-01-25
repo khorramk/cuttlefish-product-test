@@ -18,7 +18,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->float('sale_price')->nullable();
             $table->string('product_image_path')->nullable();
-            $table->unsignedBigInteger('product_categories_id');
+            $table->unsignedBigInteger('product_categories_id')->nullable();
             $table->boolean('active')->nullable();
             $table->foreign('product_categories_id')->references('id')->on('product_categories')->onDelete('cascade')->nullable();
             $table->timestamps();
