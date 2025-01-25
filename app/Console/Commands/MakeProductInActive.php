@@ -13,7 +13,7 @@ class MakeProductInActive extends Command
      *
      * @var string
      */
-    protected $signature = 'make:product:inactive';
+    protected $signature = 'make:products:inactive';
 
     /**
      * The console command description.
