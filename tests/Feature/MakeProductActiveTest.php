@@ -14,7 +14,7 @@ class MakeProductActiveTest extends TestCase
     /**
      * Testing the command for active products
      */
-    public function test_product_is_not_active(): void
+    public function test_product_is_not_active_if_prodcut_categories_is_socks(): void
     {
 
        $productCategory = new ProductCategory();
