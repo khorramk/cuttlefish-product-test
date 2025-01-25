@@ -17,21 +17,14 @@ class MakeProductActiveTest extends TestCase
     public function test_product_is_not_active_if_prodcut_categories_is_socks(): void
     {
 
-        $productCategory = ProductCategory::factory()->count(1)->create()->first();
+        ProductCategory::factory()->hasProducts(50,[
+            'active' => 1,
+            'updated_at' => now(),
+            'created_at' => now(),
+        ])->count(10)->create();
 
-       $productCategory->name = 'Socks';
-       $productCategory->category_link = 'https://cuttlefish.com/products/categories/clothes';
 
-       $productCategory->save();
-       $productCategory->products()->create([
-        'name' => 'Fluffy Socks',
-        'price' => 0.99,
-        'active' => 1,
-        'created_at' => now()->format('Y:m:d'),
-        'updated_at' => now()->format('Y:m:d'),
-       ]);
-
-        $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name;
+        $message = 'Following category Socks Products has now become inactive';
 
         $this->artisan('make:product:inactive')
                         ->expectsChoice('Please choose product Categories name', 'Socks', ['Pants', 'Tie', 'Socks', 'Suit', 'Coat', 'T-shirt'])
@@ -45,22 +38,14 @@ class MakeProductActiveTest extends TestCase
      */
     public function test_product_is_not_active_if_prodcut_categories_is_socks_and_old(): void
     {
+        ProductCategory::factory()->hasProducts(50,[
+            'active' => 1,
+            'updated_at' => now(),
+            'created_at' => now()->subYear(2)
+        ])->count(10)->create();
 
-        $productCategory = ProductCategory::factory()->count(1)->create()->first();
 
-       $productCategory->name = 'Socks';
-       $productCategory->category_link = 'https://cuttlefish.com/products/categories/clothes';
-       $productCategory->save();
-
-       $productCategory->products()->create([
-        'name' => 'Fluffy Socks',
-        'price' => 0.99,
-        'active' => 1,
-        'created_at' => now()->subYears(2)->format('Y:m:d'),
-        'updated_at' => now()->format('Y:m:d'),
-       ]);
-
-        $message = 'The follwing product is inactive: '. (string) $productCategory->products()->first()->name . ' due to added more than two years ago';
+        $message = 'Following category Socks Products has now become inactive';
 
         $this->artisan('make:product:inactive')
                         ->expectsChoice('Please choose product Categories name', 'Socks', ['Pants', 'Tie', 'Socks', 'Suit', 'Coat', 'T-shirt'])

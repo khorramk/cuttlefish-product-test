@@ -31,19 +31,33 @@ class MakeProductInActive extends Command
 
         try {
 
-          $productCategory = ProductCategory::where('name', $choice)->first();
+            if ($choice !== 'Socks') {
+                $this->error('Please choose different Categories for this command');
+                return;
+            }
+
+          $productCategory = ProductCategory::with('products')->where('name', $choice)->get();
 
           if (!$productCategory) {
               $this->error('Product is not found');
           }
 
-          $productCategory->products()->first()->active = 0;
-          $productCategory->products()->first()->save();
-          $successMessage = 'The follwing product is inactive: ' . (string) $productCategory->products()->first()->name;
+         $productCategory->each(function ($category) {
+             $products = $category->products()->whereYear('created_at', '<=', now()->subYear(2))->get();
+              foreach ($products as $key => $product) {
+                  $product->active = 0;
+                  $product->save();
+              }
+          });
+
+
+
+
+          $successMessage = 'Following category Socks Products has now become inactive';
           $this->info($successMessage);
 
         } catch (\Exception $exception) {
-            Log::error($exception->getMessage());
+            Log::error($exception->getTraceAsString());
             $this->error('Server related Error: ', $exception->getMessage());
         }
     }
